@@ -1,0 +1,61 @@
+sudo: required
+dist: trusty
+language: ruby
+
+before_install:
+before_install:
+- gem install asciidoctor -v 1.5.2
+- gem install tilt
+- sudo pip install git+https://github.com/gitenberg-dev/gitberg
+- sudo pip install pillow
+- sudo pip install cssutils
+- sudo pip install docutils
+- sudo pip install roman
+- sudo pip install git+https://github.com/gitenberg-dev/pg-epubmaker
+script:
+- VERSION=`ruby -e "require 'yaml'; meta = YAML.load_file('metadata.yaml'); puts meta['_version'];"`
+- git clone https://github.com/gitenberg-dev/asciidoctor-htmlbook.git
+- sudo pip install -r asciidoctor-htmlbook/gitberg-machine/requirements.txt
+
+- /usr/bin/python -c "from gitenberg import travis; travis.build_epub()"
+- ebook-convert book.epub book.mobi
+- xvfb-run ebook-convert book.epub book.pdf
+branches:
+  only:
+  - master
+notifications:
+  webhooks:
+    urls:
+      - https://unglue.it/api/travisci/webhook
+    on_success: always
+    on_failure: never
+    on_start: never
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key:
+    secure: kesdsLD5IFpv0LnqFtMzxdUyBOrANKIInR9VH4bBDWcwp75EqjN7bgpY3Q95PP0QBw7n59E4Ywjp2Fw36yvcQtSFzYp8B2KvpXliAVbPBH2VRWOD/L8Uh6f46/5Ux6kuSrgTUpnjUvSCopTeIuMjQa/83+SKX1Q+SW+h1+2QkINgNUOpJjqkKNP8iFNhT0N43qm5QpMjXGwES5Mu9edp8Ocsfp5koGlfFZfn6LfkNvoSTqG61xw/bVPoaEadR+dZqahQoyPaAglVQtrYG3VffNMjQOEct5SIOPXt14PoTj/1L9PQ17p7UhUfikDHMyl+uSIR9++v9vNM3WKbbViPRnNtJ0rdsqmaqzsHMlEQXVgdzeMw6leipDxGcFs+sJBjavNinY8L2vDlESVszM+fe/oodTR/PynfbC9EW/miszVPmVTWxVoQfL2vk5ofwc1CAj3F0kGJox7jUP9TbXQwYWi0jNYJlnnE5iH1pCUHDREeDJj35GnY/D4qgGaZGqZopDwfSimyizXyj8bISqFyifIMSaBsdmgpObyzPS8hSBtsGXnMcJBIUa0v8a7Cj4UsB+9wtz1cGBgwKuUwzP3AMv/BhjSb2P/E2V7cJVOEs0vxDbMfdnGXeqGfYxEbJhkLylGbKhlP9wWkbNAjYtoLOs8w3oLHhIKVQAZ5pQMwdos=
+  file:
+    - book.epub
+    - book.mobi
+    - book.pdf
+  "on":
+    repo: GITenberg/Widger-s-Quotations-from-the-Project-Gutenberg-Editions-of-the-Court-Memoirs-of-France_3730
+addons:
+  apt:
+    packages:
+    - xsltproc
+    - xvfb
+    - calibre
+    - python-pip
+    - git
+    - python-dev
+    - libjpeg-dev
+    - libpng-dev
+    - libfreetype6
+    - libfreetype6-dev
+    - zlib1g-dev
+    - python-lxml
+    - libxml2-dev
+    - libxslt1-dev
+    - tidy
