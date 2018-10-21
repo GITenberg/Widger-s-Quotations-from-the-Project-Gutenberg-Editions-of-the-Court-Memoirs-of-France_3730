@@ -1,5 +1,5 @@
 _repo: Widger-s-Quotations-from-the-Project-Gutenberg-Editions-of-the-Court-Memoirs-of-France_3730
-_version: 0.2.0
+_version: 0.2.1
 contributor:
   creator:
     editor:
@@ -31,6 +31,7 @@ rights_url: http://creativecommons.org/about/pdm
 subjects:
 - !lcc 'DC'
 - !lcsh 'Quotations'
+- GITenberg
 title: Widger's Quotations from the Project Gutenberg Editions of the Court Memoirs
   of France
 url: http://www.gutenberg.org/ebooks/3730
